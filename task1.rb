@@ -14,7 +14,7 @@ form = page.form_with :id => "form-signin"
 form.field_with(:name => "username").value = "Pib123"
 form.field_with(:name => "password").value = "Pib123"
 
-login = agent.submit
-puts login.title
+log_on = agent.submit
+puts log_on.title
     
 puts "end"

@@ -6,12 +6,14 @@ bank_url = "https://my.fibank.bg/oauth2-server/login?client_id=E_BANK"
 
 agent = Mechanize.new
 
-agent.get(bank_url)
+page = agent.get(bank_url)
 
-form = agent.page.form_with(:id => 'form-signin')
+form = page.form_with(:id => 'form-signin')
 
 form.field_with(:id => "username").value = "Pib123"
 form.field_with(:id => "password").value = "Pib123"
+
+login = agent.submit(form)
 
     
 puts "end"

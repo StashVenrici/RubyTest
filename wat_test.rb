@@ -7,4 +7,4 @@ browser = Watir::Browser.start "https://my.fibank.bg/oauth2-server/login?client_
 browser.text_field(name: 'username').set 'pib123'
 browser.text_field(name: 'password').set 'pib123'
 browser.button(id: 'submitBtn').click
-puts browser.element(id: 'user--identificator').text
+puts browser.h5(id: 'user--identificator').text

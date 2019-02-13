@@ -1,13 +1,14 @@
 require "rubygems"
 require "watir"
 require 'open-uri'
+
 browser = Watir::Browser.new :firefox
 browser.goto "https://my.fibank.bg/oauth2-server/login?client_id=E_BANK"
 #browser = Watir::Browser.start "https://my.fibank.bg/oauth2-server/login?client_id=E_BANK"
 
 browser.window.maximize
 
-#account array
+#create account array
 acc_arr=[]
 
 #entering account
@@ -26,13 +27,8 @@ end
 #click on account with bgn currency
 browser.element(xpath: "/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/table[1]/tbody[1]/tr[1]/td[1]/div[1]/div[1]/a[1]/span[1]").click
 
-
-
-
-
 #save acc INFO
 
-#save acc name
 acc_arr.push(browser.element(xpath: "/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[4]/div[1]/div[1]/dl[1]/dd[3]").text)
 
 acc_arr.push(browser.element(xpath: "/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[4]/div[1]/div[1]/dl[1]/dd[2]").text)

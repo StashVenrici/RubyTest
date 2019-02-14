@@ -1,6 +1,7 @@
 require "rubygems"
 require "watir"
 require 'open-uri'
+require './Account.rb'
 
 browser = Watir::Browser.new :firefox
 browser.goto "https://my.fibank.bg/oauth2-server/login?client_id=E_BANK"
@@ -42,18 +43,10 @@ acc_arr.push(browser.element(xpath: "/html[1]/body[1]/div[1]/div[1]/div[1]/div[2
 
 puts acc_arr.join(', ')
 
-#task 2 - Account class
-class Account
-    attr_accessor :name, :currency, :balance, :nature
-end
-
 #Account class instance
-account = Account.new
-account.name = acc_arr[0]
-account.currency = acc_arr[1]
-account.balance = acc_arr[2]
-account.nature = acc_arr[3]
+account = Account.create(acc_arr[0], acc_arr[1], acc_arr[2], acc_arr[3])
 
 #writing to .json
 acc_file = open("account1.json", "w")
 acc_file.write("\{\"accounts\"\:\n\[\n\{\n\"name\"\: \"" + account.name + "\",\n\"balance\"\: " + account.balance.to_s + ",\n\"currency\"\: \"" + account.currency + "\",\n\"nature\"\: \"" + account.nature + "\"\n\}\n\]\n\}")
+acc_file.close

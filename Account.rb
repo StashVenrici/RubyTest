@@ -9,5 +9,4 @@ class Account
         acc.nature = nature
         return acc
         end
-
 end

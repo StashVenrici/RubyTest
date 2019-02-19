@@ -75,6 +75,8 @@ tr_xpath_am1 = ']/td[3]/div[1]/span[1]'
 tr_xpath_am2 = ']/td[4]/div[1]/span[1]'
 tr_xpath_desc1 = ']/td[5]/div[1]/div[1]/p[1]'
 tr_xpath_desc2 = ']/td[5]/div[1]/div[1]/p[2]'
+tr_xpath_desc3 = ']/td[5]/div[1]/div[1]/a[1]'
+tr_xpath_desc4 = ']/td[5]/div[1]/div[1]/p[1]'
 
 i = 1
 trans_arr = []
@@ -85,25 +87,26 @@ while browser.element(xpath: _xpath).exist? do
   #date
   _xpath = tr_xpath + i.to_s + tr_xpath_date
   transaction.date = browser.element(xpath: _xpath).text
-  puts transaction.date
   
-  #amount and description    TODO: если приход денег, меняется xpath
-  # _xpath = tr_xpath + i.to_s + tr_xpath_am1
-  # _xpath1 = tr_xpath + i.to_s + tr_xpath_am2
-  # transaction.amount = if browser.element(xpath: _xpath).text.to_f == 0 then browser.element(xpath: _xpath1).text.to_f else(browser.element(xpath: _xpath).text.to_f)*(-1.0) end
-  # puts transaction.amount
-  
-  #description
-  # _xpath = tr_xpath + i.to_s + tr_xpath_desc1
-  # transaction.description = browser.element(xpath: _xpath).text
-  # _xpath = tr_xpath + i.to_s + tr_xpath_desc2
-  # transaction.description += (" " + browser.element(xpath: _xpath).text)
-  # puts transaction.description
+  #amount and description    
+   _xpath = tr_xpath + i.to_s + tr_xpath_am1
+   _xpath1 = tr_xpath + i.to_s + tr_xpath_am2
+   if browser.element(xpath: _xpath1).text.to_f == 0 
+     transaction.amount = (browser.element(xpath: _xpath).text.to_f)*(-1.0)
+     _xpath = tr_xpath + i.to_s + tr_xpath_desc1
+     _xpath1 = tr_xpath + i.to_s + tr_xpath_desc2
+     transaction.description = browser.element(xpath: _xpath).text + " " + browser.element(xpath: _xpath1).text
+   else
+    #
+    transaction.amount = browser.element(xpath: _xpath1).text.to_f
+    _xpath = tr_xpath + i.to_s + tr_xpath_desc3
+    _xpath1 = tr_xpath + i.to_s + tr_xpath_desc4
+    transaction.description = browser.element(xpath: _xpath).text + " " + browser.element(xpath: _xpath1).text
+   end
 
   trans_arr.push(transaction)
   i = i + 1
   _xpath = tr_xpath + i.to_s + tr_xpath_date
-  #puts browser.element(xpath: _xpath).exist?
 end
 
 # save transactions to file

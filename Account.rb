@@ -1,9 +1,10 @@
 require 'json'
+require './transactions.rb'
 
 class Account
-    attr_accessor :name, :currency, :balance, :nature
+    attr_accessor :name, :currency, :balance, :nature, :transactions
 
-    def Account.create(name, currency, balance, nature)
+    def Account.create(name, currency, balance, nature, transactions=[])
         acc = Account.new
         acc.name = name
         acc.currency = currency
@@ -24,6 +25,12 @@ class Account
         json_str = json_str[0..-3]
         json_str += ']}'
         return json_str
+    end
+
+    #create json string from array of accounts with transactions
+    def Account.save_full_info(accs)
+        #TODO:
+        
     end
 
 end

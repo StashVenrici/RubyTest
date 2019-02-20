@@ -15,8 +15,11 @@ class Transactions
     #json begins
     json_str = '{"transactions":['
     #add every transaction to json_string
-    for transaction in arr do
-        json_str += {:date => transaction.date, :description => transaction.description, :amount => transaction.amount}.to_json + ', '
+    for tr in arr do
+      puts tr.date
+      puts tr.description
+      puts tr.amount
+        json_str += {:date => tr.date, :description => tr.description, :amount => tr.amount}.to_json + ', '
     end
     #end json
     json_str = json_str[0..-3]

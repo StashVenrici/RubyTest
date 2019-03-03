@@ -36,6 +36,17 @@
 require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
+require 'selenium-webdriver'
 
-page = Nokogiri::HTML(open("http://mail.ru/"))   
-puts page.class   # => Nokogiri::HTML::Document
+# page = Nokogiri::HTML(open("http://mail.ru/"))   
+# puts page.class   # => Nokogiri::HTML::Document
+
+options = Selenium::WebDriver::Chrome::Options.new(args: ['headless'])
+
+driver = Selenium::WebDriver.for(:chrome, options: options)
+
+driver.get('https://my.fibank.bg/oauth2-server/login?client_id=E_BANK')
+
+puts driver.html
+
+driver.quit

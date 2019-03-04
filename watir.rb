@@ -23,23 +23,21 @@ end
 sleep(1)
 
 acc_page = browser.element(id: "step3").click
-
-#так видит ссылки
-# puts browser.as(class: "s1")[0].href
-# puts browser.as(class: "s1")[1].href
 sleep(1)
-# puts browser.as(class: "s1").count
 
 $acc_links = Array.new
 $acc_links = browser.as(class: "s1")
 
 $i = 0
 $num = $acc_links.count
-# puts 'num = ' + $num.to_s
 while $i<$num do
-  puts 'i = ' + $i.to_s
-  puts $array1[$i].href
+  $acc_links[$i].click
+  #TODO - capture acc info
+  puts browser.title
+  sleep(1)
+  browser.back
+  sleep(1)
   $i += 1
 end
 
-# browser.quit
+browser.close

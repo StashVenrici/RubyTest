@@ -47,7 +47,7 @@ acc_arr.push(browser.element(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2
 #puts acc_arr.join(', ')
 
 # Account class instance
-account = Account.create(acc_arr[0], acc_arr[1], acc_arr[2], acc_arr[3])
+account = Account.new(acc_arr[0], acc_arr[1], acc_arr[2], acc_arr[3])
 
 # writing acc info to .json manually
 # acc_file = open('accounts.json', 'w')

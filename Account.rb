@@ -4,13 +4,12 @@ require './transactions.rb'
 class Account
     attr_accessor :name, :currency, :balance, :nature, :transactions
 
-    def Account.create(name, currency, balance, nature, transactions=[])
-        acc = Account.new
-        acc.name = name
-        acc.currency = currency
-        acc.balance = balance
-        acc.nature = nature
-        return acc
+    def initialize(name, currency, balance, nature, transactions=[])
+        @name = name
+        @currency = currency
+        @balance = balance
+        @nature = nature
+        @transactions = transactions
     end
 
     #create json string from array of accounts

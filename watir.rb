@@ -68,24 +68,40 @@ end
 #end Task 4
 
 # Task 5
-#TODO: такая итерация не подходит, переделать
-$i = 0
-while $i<$num do
-  $acc_links[$i].click
-  sleep(1)
+
   browser.element(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/ul[1]/li[3]/a[1]').click
-  puts "Account Nr #{$i+1} transactions:"
   browser.text_field(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[2]/div[1]/div[1]/div[1]/div[1]/input[1]').set '01/10/2018'
   browser.text_field(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[2]/div[2]/div[1]/div[1]/div[1]/input[1]').set '01/01/2019'
   browser.element(:id => 'button').click
   table = browser.table(id: 'accountStatements')
-  puts table[0].text
+  k = table.count
 
-  sleep(1)
-  browser.back
-  browser.back
-  sleep(1)
-  $i += 1
-end
+  puts "\n================Transactions:=================="
+  tr = []
+  j = 3
+  while j<=k-4 do
+    puts 'Transaction Nr ' + (j-2).to_s
+    row = table[j]
+    tr[j-3] = Transactions.new()
+    tr[j-3].date = row[0].text
+    puts 'Date: ' + row[0].text
+    if row[2].text.to_f == 0 then
+      tr[j-3].amount = row[3].text.to_f
+    else
+      tr[j-3].amount = -(row[2].text.to_f)
+    end
+    puts 'Amount = ' + tr[j-3].amount.to_s
 
-browser.close
+    tr[j-3].description = row[4].text
+    puts 'Description: ' + row[4].text
+    puts '==============================================='
+    j +=1
+
+  end
+
+  puts 'Qty of transactions: ' + tr.length.to_s
+
+
+
+
+# browser.close

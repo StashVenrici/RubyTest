@@ -26,19 +26,19 @@ sleep(1)
 
 # Task 2
 # print accounts info:
-acc_page = browser.element(id: "step3").click
-sleep(1)
+browser.a(href: "/EBank/accounts/summ").click
 
 # create account array
 $acc_arr = []
-
-$acc_links = Array.new
-$acc_links = browser.as(class: "s1")
+$acc_links = browser.links(href: /\/EBank\/accounts\/details/)
+# хз почему, но если не вызвать метод ".first.text" для коллекции ссылок, она остается пустой
+x = $acc_links.first.text #поэтому добавляем эту ненужную переменную и забываем о ней
 
 $i = 0
 $num = $acc_links.count
 while $i<$num do
   $acc_links[$i].click
+  puts "-----------------------------------------------"
   puts "Account Nr #{$i+1}:"
   name = browser.dt(text: /Account owner:/).following_sibling.text
   puts 'Name: ' + name
@@ -68,39 +68,51 @@ end
 #end Task 4
 
 # Task 5
+# go to the transactions page:
+browser.element(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/ul[1]/li[3]/a[1]').click
 
-  browser.element(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/ul[1]/li[3]/a[1]').click
-  browser.text_field(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[2]/div[1]/div[1]/div[1]/div[1]/input[1]').set '01/10/2018'
-  browser.text_field(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[2]/div[2]/div[1]/div[1]/div[1]/input[1]').set '01/01/2019'
-  browser.element(:id => 'button').click
-  table = browser.table(id: 'accountStatements')
-  k = table.count
+  #test saving default acc transactions
+  # browser.text_field(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[2]/div[1]/div[1]/div[1]/div[1]/input[1]').set '01/10/2018'
+  # browser.text_field(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[2]/div[2]/div[1]/div[1]/div[1]/input[1]').set '01/01/2019'
+  # browser.element(:id => 'button').click
+  # table = browser.table(id: 'accountStatements')
+  # k = table.count
 
-  puts "\n================Transactions:=================="
-  tr = []
-  j = 3
-  while j<=k-4 do
-    puts 'Transaction Nr ' + (j-2).to_s
-    row = table[j]
-    tr[j-3] = Transactions.new()
-    tr[j-3].date = row[0].text
-    puts 'Date: ' + row[0].text
-    if row[2].text.to_f == 0 then
-      tr[j-3].amount = row[3].text.to_f
-    else
-      tr[j-3].amount = -(row[2].text.to_f)
-    end
-    puts 'Amount = ' + tr[j-3].amount.to_s
+  # puts "\n================Transactions:=================="
+  # tr = []
+  # j = 3
+  # while j<=k-4 do
+  #   puts 'Transaction Nr ' + (j-2).to_s
+  #   row = table[j]
+  #   tr[j-3] = Transactions.new()
+  #   tr[j-3].date = row[0].text
+  #   puts 'Date: ' + row[0].text
+  #   if row[2].text.to_f == 0 then
+  #     tr[j-3].amount = row[3].text.to_f
+  #   else
+  #     tr[j-3].amount = -(row[2].text.to_f)
+  #   end
+  #   puts 'Amount = ' + tr[j-3].amount.to_s
 
-    tr[j-3].description = row[4].text
-    puts 'Description: ' + row[4].text
-    puts '==============================================='
-    j +=1
+  #   tr[j-3].description = row[4].text
+  #   puts 'Description: ' + row[4].text
+  #   puts '==============================================='
+  #   j +=1
 
+  # end
+
+  # puts 'Qty of transactions: ' + tr.length.to_s
+  #end testing default acc transactions
+  puts "\n"
+  sleep(1)
+  browser.button(class: ["btn", "dropdown-toggle", "btn-default"]).click
+  list = browser.ul(class: ["dropdown-menu", "inner"])
+
+  list.each do |elem|
+    puts "link: "
+    puts elem.a.text
   end
-
-  puts 'Qty of transactions: ' + tr.length.to_s
-
+  
 
 
 

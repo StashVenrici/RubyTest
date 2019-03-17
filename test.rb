@@ -33,20 +33,46 @@
 # wiki_file.close
 
 #3 test Nokogiri
-require 'rubygems'
-require 'nokogiri'
-require 'open-uri'
-require 'selenium-webdriver'
+# require 'rubygems'
+# require 'nokogiri'
+# require 'open-uri'
+# require 'selenium-webdriver'
 
-# page = Nokogiri::HTML(open("http://mail.ru/"))   
-# puts page.class   # => Nokogiri::HTML::Document
+# # page = Nokogiri::HTML(open("http://mail.ru/"))   
+# # puts page.class   # => Nokogiri::HTML::Document
 
-options = Selenium::WebDriver::Chrome::Options.new(args: ['headless'])
+# options = Selenium::WebDriver::Chrome::Options.new(args: ['headless'])
 
-driver = Selenium::WebDriver.for(:chrome, options: options)
+# driver = Selenium::WebDriver.for(:chrome, options: options)
 
-driver.get('https://my.fibank.bg/oauth2-server/login?client_id=E_BANK')
+# driver.get('https://my.fibank.bg/oauth2-server/login?client_id=E_BANK')
 
-puts driver.html
+# puts driver.html
 
-driver.quit
+# driver.quit
+
+
+# test browsing page
+require 'watir'
+
+browser = Watir::Browser.new :firefox
+browser.goto 'https://my.fibank.bg/oauth2-server/login?client_id=E_BANK'
+browser.window.maximize
+sleep(5)
+
+browser.text_field(name: 'username').set 'pib123'
+browser.text_field(name: 'password').set 'pib123'
+browser.button(id: 'submitBtn').click
+sleep(5)
+
+lang_select_xpath = '/html[1]/body[1]/div[1]/div[1]/header[1]/nav[1]/ul[1]/li[1]/a[1]'
+if browser.element(xpath: lang_select_xpath).text.casecmp('ENGLISH').zero?
+  browser.element(xpath: lang_select_xpath).click
+end
+sleep(5)
+
+browser.a(href: "/EBank/accounts/summ").click
+sleep(5)
+
+
+puts "end"

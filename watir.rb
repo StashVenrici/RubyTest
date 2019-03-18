@@ -9,7 +9,7 @@ browser.goto 'https://my.fibank.bg/oauth2-server/login?client_id=E_BANK'
 browser.window.maximize
 
 
-# Task 1 
+# Task 1 (sign into the bank interface)
 # entering bank account:
 browser.text_field(name: 'username').set 'pib123'
 browser.text_field(name: 'password').set 'pib123'
@@ -24,8 +24,7 @@ end
 sleep(1)
 
 
-# Task 2
-# print accounts info:
+# Task 2 (print accounts info)
 browser.a(href: "/EBank/accounts/summ").click
 
 # create account array
@@ -37,10 +36,10 @@ x = $acc_links.first.text #поэтому добавляем эту ненужн
 $i = 0
 $num = $acc_links.count
 while $i<$num do
+  name = $acc_links[$i].text
   $acc_links[$i].click
   puts "-----------------------------------------------"
   puts "Account Nr #{$i+1}:"
-  name = browser.dt(text: /Account owner:/).following_sibling.text
   puts 'Name: ' + name
   currency = browser.dt(text: /Currency:/).following_sibling.text
   puts 'Currency: ' + currency
@@ -59,60 +58,69 @@ while $i<$num do
 end
 #end Task 2
 
-# Task 3
-# created Account's class and "create_json_string" method for saving account's array to JSON string
+# Task 3 (created Account's class and "create_json_string" method for saving account's array to JSON string)
+# done - see file 'accounts.rb'
 #end Task 3
 
-# Task 4
-# created Transactions class and "create_json_string" method
+# Task 4 (created Transactions class and "create_json_string" method)
+# done - see file 'transactions.rb'
 #end Task 4
 
-# Task 5
+# Task 5 (extend script to output the list of transactions for the last two months)
 # go to the transactions page:
 browser.element(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/ul[1]/li[3]/a[1]').click
 
-  #test saving default acc transactions
-  # browser.text_field(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[2]/div[1]/div[1]/div[1]/div[1]/input[1]').set '01/10/2018'
-  # browser.text_field(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[2]/div[2]/div[1]/div[1]/div[1]/input[1]').set '01/01/2019'
-  # browser.element(:id => 'button').click
-  # table = browser.table(id: 'accountStatements')
-  # k = table.count
-
-  # puts "\n================Transactions:=================="
-  # tr = []
-  # j = 3
-  # while j<=k-4 do
-  #   puts 'Transaction Nr ' + (j-2).to_s
-  #   row = table[j]
-  #   tr[j-3] = Transactions.new()
-  #   tr[j-3].date = row[0].text
-  #   puts 'Date: ' + row[0].text
-  #   if row[2].text.to_f == 0 then
-  #     tr[j-3].amount = row[3].text.to_f
-  #   else
-  #     tr[j-3].amount = -(row[2].text.to_f)
-  #   end
-  #   puts 'Amount = ' + tr[j-3].amount.to_s
-
-  #   tr[j-3].description = row[4].text
-  #   puts 'Description: ' + row[4].text
-  #   puts '==============================================='
-  #   j +=1
-
-  # end
-
-  # puts 'Qty of transactions: ' + tr.length.to_s
-  #end testing default acc transactions
+  
   puts "\n"
   sleep(1)
   browser.button(class: ["btn", "dropdown-toggle", "btn-default"]).click
+  # saving accounts links
   list = browser.ul(class: ["dropdown-menu", "inner"])
+  browser.button(class: ["btn", "dropdown-toggle", "btn-default"]).click
 
   list.each do |elem|
-    puts "link: "
-    puts elem.a.text
+    browser.button(class: ["btn", "dropdown-toggle", "btn-default"]).click
+    puts "Transactions: " + elem.a.text
+    elem.a.click
+    browser.text_field(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[2]/div[1]/div[1]/div[1]/div[1]/input[1]').set '01/10/2018'
+    browser.text_field(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[2]/div[2]/div[1]/div[1]/div[1]/input[1]').set '01/01/2019'
+    browser.element(:id => 'button').click
+    sleep(1)
+    if !browser.table(id: 'accountStatements').exist?
+      print '---No transactions found---'
+      next
+    end
+    table = browser.table(id: 'accountStatements')
+    
+    k = table.count
+    
+    tr = []
+    j = 3
+    while j<=k-4 do
+      puts 'Transaction Nr ' + (j-2).to_s
+      row = table[j]
+      tr[j-3] = Transactions.new()
+      tr[j-3].date = row[0].text
+      puts 'Date: ' + row[0].text
+      if row[2].text.to_f == 0 then
+        tr[j-3].amount = row[3].text.to_f
+      else
+        tr[j-3].amount = -(row[2].text.to_f)
+      end
+    puts 'Amount = ' + tr[j-3].amount.to_s
+
+    tr[j-3].description = row[4].text
+    puts 'Description: ' + row[4].text
+    puts '==============================================='
+    sleep(1)
+    j +=1
   end
-  
+  puts 'Qty of transactions: ' + tr.length.to_s + "\n..."
+  sleep(1)
+  end
+# Task 5 end
+
+
 
 
 

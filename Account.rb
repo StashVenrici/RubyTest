@@ -35,12 +35,16 @@ class Account
             json_str += {:name => acc.name, :currency => acc.currency, :balance => acc.balance, :nature => acc.nature}.to_json
             json_str = json_str[0..-2]
             #TODO: cover case no transactions!
-            json_str += ', "transactions": ['
-            for tr in acc.transactions do
-                json_str +={:date => tr.date, :description => tr.description, :amount => tr.amount}.to_json + ', '
+            if acc.transactions == []
+                json_str += ', "transactions": []}, '
+            else 
+                json_str += ', "transactions": ['
+                for tr in acc.transactions do
+                    json_str +={:date => tr.date, :description => tr.description, :amount => tr.amount}.to_json + ', '
+                end
+                json_str = json_str[0..-3]
+                json_str += ']}, '
             end
-            json_str = json_str[0..-3]
-            json_str += ']}, '
         end
         json_str = json_str[0..-3]
         json_str += ']}'

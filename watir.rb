@@ -80,7 +80,10 @@ browser.element(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[
 
   list.each do |elem|
     browser.button(class: ["btn", "dropdown-toggle", "btn-default"]).click
-    puts "Transactions: " + elem.a.text
+    iban = elem.a.text
+    iban = iban.split(' ')
+    # puts "Transactions: " + elem.a.text
+    puts "Transactions: " + iban[0]
     elem.a.click
     browser.text_field(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[2]/div[1]/div[1]/div[1]/div[1]/input[1]').set '01/10/2018'
     browser.text_field(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/form[1]/div[2]/div[2]/div[1]/div[1]/div[1]/input[1]').set '01/01/2019'
@@ -117,9 +120,22 @@ browser.element(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[
   end
   puts 'Qty of transactions: ' + tr.length.to_s + "\n..."
   sleep(1)
+  $acc_arr = BindTransactions(iban[0], tr, $acc_arr)
   end
 # Task 5 end
 
+# Task 6 (saving accounts with list of Transactions)
+def BindTransactions(accname, tr_arr, acc_arr)
+  acc_arr.each do |acc|
+    if acc.name == accname
+      acc.transactions = tr_arr
+    end
+  end
+end
+
+puts "\n\n===================================="
+puts Account.save_full_info($acc_arr)
+# Task 6 end
 
 
 

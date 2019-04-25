@@ -56,6 +56,10 @@ require './transactions.rb'
     # извлекаем currency
     # currency = browser.dt(text: /Currency:/).following_sibling.text
     # currency = nokpage.css("dd[ng-bind='model.acc.ccy']")
+
+    
+    puts nokpage.css("dd[ng-bind='model.acc.ccy']").text #не работает
+    puts nokpage.css("dt[translate='PAGES.ACCOUNT_DETAIL.INFO.CCY']").text #здесь работает
     File.open('page.html','w'){ |file| file.write browser.html }
 
     # puts 'Currency: ' + currency

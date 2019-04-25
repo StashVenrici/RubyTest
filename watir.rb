@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'watir'
-require 'nokogiri'
 require 'open-uri'
 require './account.rb'
 require './transactions.rb'
@@ -130,11 +129,11 @@ def DoWithWatir()
       j +=1
     end
     
-  puts 'Qty of transactions: ' + tr.length.to_s + "\n..."
-  sleep(1)
+    puts 'Qty of transactions: ' + tr.length.to_s + "\n..."
+    sleep(1)
 
-  # bind transactions to account
-  $acc_arr = BindTransactions(iban[0], tr, $acc_arr)
+    # bind transactions to account
+    $acc_arr = BindTransactions(iban[0], tr, $acc_arr)
   end
   # Task 5 end
 

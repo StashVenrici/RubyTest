@@ -8,8 +8,8 @@ class Transactions
     @amount = amount
   end
 
-   #create json string from array of transactions
-   def Transactions.create_json_string(arr)
+  #create json string from array of transactions
+  def Transactions.create_json_string(arr)
     if arr.empty?  then 
       return '{"transactions":[]}' 
     end
@@ -23,5 +23,10 @@ class Transactions
     json_str = json_str[0..-3]
     json_str += ']}'
     return json_str
-end
+  end
+
+  # print out transaction info
+  def GetTransactionInfo()
+    return "Date:\t" + self.date + "\nAmount:\t" + self.amount.to_s + "\nDescription:\t" + self.description
+  end
 end

@@ -2,7 +2,8 @@ require 'json'
 
 class Transactions
   attr_accessor :date, :description, :amount
-  def initialize(date="", description="", amount=0)
+  
+  def initialize(date = "", description = "", amount = 0)
     @date = date
     @description = description
     @amount = amount

@@ -16,7 +16,7 @@ end
 
 # Task 7 (Use Nokogiri)
 
-# def DoWithNokogiri()
+def DoWithNokogiri()
   # open page
   browser = Watir::Browser.new :firefox
   browser.goto 'https://my.fibank.bg/oauth2-server/login?client_id=E_BANK'
@@ -42,14 +42,13 @@ end
 
   acc_links = browser.links(href: /\/EBank\/accounts\/details/)
   # хз почему, но если не вызвать метод ".first.text" для коллекции ссылок, она остается пустой
-  # поэтому добавляем эту ненужную переменную и забываем о ней
+  # поэтому добавляем эту ненужную переменную и забываем о ней:
   x = acc_links.first.text
 
   # print accounts info and saving to accounts array
   i = 0
   $num = acc_links.count
   while i<$num do
-
     name = acc_links[i].text
     acc_links[i].click
 
@@ -72,15 +71,12 @@ end
     nature = nokpage.css("dd[@class='ng-scope']").text
     puts 'Nature: ' + nature
     $acc_arr[i] = Account.new(name, currency, balance, nature)
-    
     sleep(1)
     browser.back
     sleep(1)
     i += 1
   end
   
-
-
   # go to the transactions page:
   browser.element(xpath: '/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/ul[1]/li[3]/a[1]').click
   puts "\n++++++++++++++++++++++++++++++++++\n"
@@ -125,33 +121,26 @@ end
       puts 'Transaction nr ' + (trcounter).to_s + ':'
       trs = Transactions.new()
       trs.date = row.css('td')[0].text
-
       if (row.css('td')[2].text.to_f == 0) then
         trs.amount = row.css('td')[3].text.to_f
       else
         trs.amount = -(row.css('td')[2].text.to_f)
       end
-
       trs.description = row.css('td')[4].text
-      
+      # add transaction to array
       tr.push(trs)
       puts trs.GetTransactionInfo()
-      
       trcounter += 1
     end
 
     puts "\nQty of transactions: " + tr.length.to_s + "\n..."
     sleep(1)
-
-    # bind transactions to account
-    
+    # bind transactions to account:
     $acc_arr = BindTransactions(iban[0], tr, $acc_arr)
-
     puts "----------------------------------------------------------\n"
   end #end accounts links actions
 
-  puts Account.save_full_info($acc_arr)
+  return Account.save_full_info($acc_arr)
+end #end DoWithNokogiri method
 
-# end
-
-# DoWithNokogiri()
+puts DoWithNokogiri()

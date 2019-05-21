@@ -4,7 +4,7 @@ require './transactions.rb'
 class Account
     attr_accessor :name, :currency, :balance, :nature, :transactions
 
-    def initialize(name, currency, balance, nature, transactions=[])
+    def initialize(name, currency, balance, nature, transactions = [])
         @name = name
         @currency = currency
         @balance = balance

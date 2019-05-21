@@ -84,7 +84,6 @@ def DoWithWatir()
   # open each link to see transactions
   list.each do |elem|
     browser.button(class: ["btn", "dropdown-toggle", "btn-default"]).click
-
     # save iban to bind transactions to concret accout later
     iban = elem.a.text
     iban = iban.split(' ')
@@ -121,7 +120,6 @@ def DoWithWatir()
         tr[j-3].amount = -(row[2].text.to_f)
       end
       puts 'Amount = ' + tr[j-3].amount.to_s
-
       tr[j-3].description = row[4].text
       puts 'Description: ' + row[4].text
       puts '==============================================='
